@@ -2,9 +2,9 @@
 [![Gem Version](https://badge.fury.io/rb/super_uri.svg)](https://badge.fury.io/rb/super_uri)
 
 [![Build Status](https://travis-ci.org/kigster/super_uri.svg?branch=master)](https://travis-ci.org/kigster/super_uri)
-[![Code Climate](https://codeclimate.com/repos/588d08ab8dcb7c006a004c31/badges/fbe3044e50dfc06f7b93/gpa.svg)](https://codeclimate.com/repos/588d08ab8dcb7c006a004c31/feed)
-[![Test Coverage](https://codeclimate.com/repos/588d08ab8dcb7c006a004c31/badges/fbe3044e50dfc06f7b93/coverage.svg)](https://codeclimate.com/repos/588d08ab8dcb7c006a004c31/coverage)
-[![Issue Count](https://codeclimate.com/repos/588d08ab8dcb7c006a004c31/badges/fbe3044e50dfc06f7b93/issue_count.svg)](https://codeclimate.com/repos/588d08ab8dcb7c006a004c31/feed)
+[![Code Climate](https://codeclimate.com/repos/5891c85f589f751f200065c2/badges/8fd45e0f3d49012a23c6/gpa.svg)](https://codeclimate.com/repos/5891c85f589f751f200065c2/feed)
+[![Test Coverage](https://codeclimate.com/repos/5891c85f589f751f200065c2/badges/8fd45e0f3d49012a23c6/coverage.svg)](https://codeclimate.com/repos/5891c85f589f751f200065c2/coverage)
+[![Issue Count](https://codeclimate.com/repos/5891c85f589f751f200065c2/badges/8fd45e0f3d49012a23c6/issue_count.svg)](https://codeclimate.com/repos/5891c85f589f751f200065c2/feed)
 
 > **WARNING**: This gem is currently under active development, and is not yet stable. Use at your own risk.
 
@@ -96,22 +96,22 @@ URI('env://HOME').read
 ###### Read/Write Hash Value by Key
 
 ```ruby
-URI::IO['redis://localhost:6379/1/firstname').write('konstantin')
+URI('redis://localhost:6379/1/firstname').write('konstantin')
 # => 'OK'
-URI::IO['redis://localhost:6379/1/firstname').read
+URI('redis://localhost:6379/1/firstname').read
 # => 'konstantin'
 ```
 
 ###### Any Operation?
 
 ```ruby
-URI::IO['redis://localhost:6379/1/operation').run(*args)
+URI('redis://localhost:6379/1/operation').run(*args)
 ```
 
 ##### File Operation
 
 ```ruby
-URI::IO['scp://user@host/path/file').delete
+URI('scp://user@host/path/file').delete
 ```
 
 Suggested possible ways of accessing local and remote data:
@@ -120,7 +120,7 @@ Suggested possible ways of accessing local and remote data:
 URI('string://value').read
 # => "value"
 
-URI::IO['env://PATH').read
+URI('env://PATH').read
 # => "/bin:/usr/bin:/usr/local/bin"
 
 URI('stdin:/').read
