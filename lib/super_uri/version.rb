@@ -1,3 +1,3 @@
-module SuperUri
-  VERSION = "0.1.0"
+module SuperURI
+  VERSION = '0.1.0'
 end

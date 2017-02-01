@@ -1,8 +1,143 @@
-# SuperUri
+[![Downloads](http://ruby-gem-downloads-badge.herokuapp.com/super_uri?type=total)](https://rubygems.org/gems/super_uri)
+[![Gem Version](https://badge.fury.io/rb/super_uri.svg)](https://badge.fury.io/rb/super_uri)
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/super_uri`. To experiment with that code, run `bin/console` for an interactive prompt.
+[![Build Status](https://travis-ci.org/kigster/super_uri.svg?branch=master)](https://travis-ci.org/kigster/super_uri)
+[![Code Climate](https://codeclimate.com/repos/588d08ab8dcb7c006a004c31/badges/fbe3044e50dfc06f7b93/gpa.svg)](https://codeclimate.com/repos/588d08ab8dcb7c006a004c31/feed)
+[![Test Coverage](https://codeclimate.com/repos/588d08ab8dcb7c006a004c31/badges/fbe3044e50dfc06f7b93/coverage.svg)](https://codeclimate.com/repos/588d08ab8dcb7c006a004c31/coverage)
+[![Issue Count](https://codeclimate.com/repos/588d08ab8dcb7c006a004c31/badges/fbe3044e50dfc06f7b93/issue_count.svg)](https://codeclimate.com/repos/588d08ab8dcb7c006a004c31/feed)
 
-TODO: Delete this and the text above, and describe your gem
+> **WARNING**: This gem is currently under active development, and is not yet stable. Use at your own risk.
+
+# SuperURI — Uniformly Locate Data Anywhere :) 
+
+## Summary
+
+This gem aims to combine the extensibility of the `URI` class — its design supports adding new and custom URI __schemes__, with the `open` and `read` semantics of the `OpenURI` standard ruby module, and aims to greatly expand the list of URIs that can be read. 
+
+Eventually this gem might also offer ability to **write** data to the URI.
+
+## Usage
+
+As much as possible, we wanted to extend the existing `OpenURI` interface:
+
+```ruby
+require 'super_uri'
+
+contents = URI([String]).read
+
+URI.parse([String]).open do |file|
+  #...
+end
+```
+
+### Additional Schemes
+ 
+The key to this gem is the large selection of the URIs that can be provided and instantly used to read data. Let's take a look at a few examples:
+
+```ruby
+require 'super_uri'
+
+URI('env://HOME').read
+# => "/Users/"
+
+URI('file:///usr/local/etc/hosts').read
+# => "127.0.0.1    localhost\n...."
+
+URI('redis:///1/mykey').read
+# => "keyvalue"
+
+```
+
+Future versions might allow writing and deleting of the data:
+
+```ruby
+# 
+URI('file:///usr/local/etc/hosts').write(data)
+# => 23425
+URI('file:///usr/local/etc/hosts').delete
+# => true
+
+URI('redis:///1/mykey').write('keyvalue')
+# => 8
+URI('redis:///1/mykey').delet
+# => true
+```
+
+
+### Motivation
+
+This gem was born out of the desire to easily read and write data via a large number of ways during development of another gem — [sym](https://github.com/kigster/sym) — which performs symmetric encryption, and needs to read the private key and the data, and write the result (and sometimes the private key). After running out of flags to pass indiciating how exactly the private key is supplied, I had an epiphany — what if I can just use one flag with the data source URI? 
+
+### Approach
+
+There are two high-level steps required to create a unified way of reading/writing various resources:
+
+ 1. One must define the syntax for describing how to access it
+ 2. One must implement the actual read/write code for each supported syntax.
+
+The most natural fit for 1 seems to be the `URI` module. It can be easily extended by design, and already supports many schemes out the box. In addition, a popular `OpenURI` extension adds the `open` call to `http[s]`, `ftp`, and `ssh` protocols, partially providing #2 for these schemes.
+
+However, `OpenURI` only supports a few protocols, and does not currently support *delete* operation. 
+
+The approach we take is to extend `URI` with the schemes with support, and fulfill them using `Handlers` that can be easily added.
+
+## Supported URIs
+
+The following types are planned to be supported:
+
+##### Environment Variables
+
+```ruby
+URI('env://HOME').read
+# => /Users/kig
+```
+##### Redis
+
+###### Read/Write Hash Value by Key
+
+```ruby
+URI::IO['redis://localhost:6379/1/firstname').write('konstantin')
+# => 'OK'
+URI::IO['redis://localhost:6379/1/firstname').read
+# => 'konstantin'
+```
+
+###### Any Operation?
+
+```ruby
+URI::IO['redis://localhost:6379/1/operation').run(*args)
+```
+
+##### File Operation
+
+```ruby
+URI::IO['scp://user@host/path/file').delete
+```
+
+Suggested possible ways of accessing local and remote data:
+
+```ruby
+URI('string://value').read
+# => "value"
+
+URI::IO['env://PATH').read
+# => "/bin:/usr/bin:/usr/local/bin"
+
+URI('stdin:/').read
+# => data from STDIN until EOF
+
+URI('shell://echo%20hello').read
+# => "hello"
+
+URI('redis://127.0.0.1:6397/1/get,firstname').read
+# => 'konstantin'
+```
+
+Similarly, we could read data from:
+
+    memcached://127.0.0.1:11211/operation,arg1,arg2,...
+    scp://user@host/path/file        
+    postgresql://user@host/db/?sql=<sql-query>
 
 ## Installation
 
@@ -20,9 +155,6 @@ Or install it yourself as:
 
     $ gem install super_uri
 
-## Usage
-
-TODO: Write usage instructions here
 
 ## Development
 
@@ -32,7 +164,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/super_uri.
+Bug reports and pull requests are welcome on GitHub at https://github.com/kigster/super_uri.
 
 
 ## License

@@ -5,7 +5,7 @@ require 'super_uri/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "super_uri"
-  spec.version       = SuperUri::VERSION
+  spec.version       = SuperURI::VERSION
   spec.authors       = ["Konstantin Gredeskoul"]
   spec.email         = ["kigster@gmail.com"]
 
@@ -21,7 +21,15 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.13"
-  spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec", "~> 3.0"
+
+  spec.add_dependency 'net-scp'
+
+  spec.add_development_dependency 'bundler', '~> 1'
+  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rspec-its'
+  spec.add_development_dependency 'awesome_print'
+  spec.add_development_dependency 'simplecov'
+  spec.add_development_dependency 'codeclimate-test-reporter',"~> 1.0.0"
+  spec.add_development_dependency 'rspec', '~> 3'
+
 end
