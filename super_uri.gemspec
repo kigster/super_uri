@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Konstantin Gredeskoul"]
   spec.email         = ["kigster@gmail.com"]
 
-  spec.summary       = %q{Placeholder: Gem to read/write to URIs}
-  spec.description   = %q{Placeholder: Gem to read/write to URIs}
+  spec.summary       = %q{Extension to the OpenURI module that understands many additional types of URI resources, and is able to open and read them. Included are: file://, scp://, env://, osxkeychain://, redis://, memcached:// schemes.}
+  spec.description   = %q{Extension to the OpenURI module that understands many additional types of URI resources, and is able to open and read them. Included are: file://, scp://, env://, osxkeychain://, redis://, memcached:// schemes.}
   spec.homepage      = "https://github.com/kigster/super_uri"
   spec.license       = "MIT"
 
@@ -20,7 +20,6 @@ Gem::Specification.new do |spec|
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
-
 
   spec.add_dependency 'net-scp'
 
